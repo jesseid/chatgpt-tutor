@@ -22,7 +22,7 @@ export const post: APIRoute = async (context) => {
   // #vercel-end
 
   // @ts-ignore
-  const response = await fetch('https://api.openai.com/v1/chat/completions', initOptions) as Response
+  const response = await fetch('https://openai.1rmb.tk/v1/chat/completions', initOptions) as Response
 
   return new Response(parseOpenAIStream(response))
 }
