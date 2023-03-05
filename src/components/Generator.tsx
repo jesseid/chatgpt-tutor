@@ -5,27 +5,26 @@ import type { ChatMessage } from '@/types'
 import { useSpeechRecognition } from "react-speech-kit";
 import RecordIcon from './icons/RecordIcon';
 import StopIcon from './icons/StopIcon';
+import { useState } from 'react';
 
 export default () => {
-  let inputRef: HTMLInputElement
+  const [inputValue, setInputValue] = useState('');
   const [messageList, setMessageList] = createSignal<ChatMessage[]>([])
   const [currentAssistantMessage, setCurrentAssistantMessage] = createSignal('')
   const [loading, setLoading] = createSignal(false)
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result: string) => {
-      inputRef.value=result;
+      setInputValue(result);
     }
   });
 
   const handleButtonClick = async () => {
-    const inputValue = inputRef.value
     if (!inputValue) {
       return
     }
     setLoading(true)
     // @ts-ignore
     if (window?.umami) umami.trackEvent('chat_generate')
-    inputRef.value = ''
     setMessageList([
       ...messageList(),
       {
@@ -76,27 +75,35 @@ export default () => {
   }
 
   const clear = () => {
-    inputRef.value = ''
+    setInputValue('')
     setMessageList([])
     setCurrentAssistantMessage('')
   }
+  const Show = ({ when, fallback, children }) => {
+    return when ? children : fallback();
+  };
 
   return (
     <div my-6>
-      <For each={messageList()}>{(message) => <MessageItem role={message.role} message={message.content} />}</For>
-      { currentAssistantMessage() && <MessageItem role="assistant" message={currentAssistantMessage} /> }
-      <Show when={!loading()} fallback={() => <div class="h-12 my-4 flex items-center justify-center bg-slate bg-op-15 text-slate rounded-sm">AI is thinking...</div>}>
-        <div class="my-4 flex items-center gap-2">
+      {/* <For each={messageList()}>{(message) => <MessageItem role={message.role} message={message.content} />}</For> */}
+      {messageList().map((message) => <MessageItem role={message.role} message={message.content} />)}
+      {currentAssistantMessage() && <MessageItem role="assistant" message={currentAssistantMessage} />}
+      {/* <Show when={!loading()} fallback={() => <div className="h-12 my-4 flex items-center justify-center bg-slate bg-op-15 text-slate rounded-sm">AI is thinking...</div>}> */}
+      <Show when={!loading()} fallback={() => <div className="h-12 my-4 flex items-center justify-center bg-slate bg-op-15 text-slate rounded-sm">AI is thinking...</div>}>
+        <div className="my-4 flex items-center gap-2">
           <input
-            ref={inputRef!}
+            value={inputValue}
             type="text"
             id="input"
             placeholder="Enter something..."
-            autocomplete='off'
-            autofocus
+            autoComplete='off'
+            autoFocus
             disabled={loading()}
             onKeyDown={(e) => {
-              e.key === 'Enter' && !e.isComposing && handleButtonClick()
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleButtonClick();
+              }
             }}
             w-full
             px-4

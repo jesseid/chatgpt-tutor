@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import type { Accessor } from 'solid-js'
 import type { ChatMessage } from '@/types'
 import MarkdownIt from 'markdown-it'
@@ -27,9 +29,9 @@ export default ({ role, message }: Props) => {
     return ''
   }
   return (
-    <div class="flex py-2 gap-3 -mx-4 px-4 rounded-lg transition-colors md:hover:bg-slate/3" class:op-75={ role === 'user' }>
-      <div class={ `shrink-0 w-7 h-7 mt-4 rounded-full op-80 ${ roleClass[role] }` }></div>
-      <div class="message prose text-slate break-words overflow-hidden" innerHTML={htmlString()} />
+    <div className="flex py-2 gap-3 -mx-4 px-4 rounded-lg transition-colors md:hover:bg-slate/3" class:op-75={ role === 'user' }>
+      <div className={ `shrink-0 w-7 h-7 mt-4 rounded-full op-80 ${ roleClass[role] }` }></div>
+      <div className="message prose text-slate break-words overflow-hidden" dangerouslySetInnerHTML={{ __html: htmlString() }}  />
     </div>
   )
 }
