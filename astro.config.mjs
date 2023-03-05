@@ -4,6 +4,7 @@ import { presetUno } from 'unocss'
 import presetAttributify from '@unocss/preset-attributify'
 import presetTypography from '@unocss/preset-typography'
 import solidJs from '@astrojs/solid-js'
+import reactJs from '@astrojs/react-js' // 添加这一行
 import vercelDisableBlocks from './plugins/vercelDisableBlocks'
 
 import node from '@astrojs/node'
@@ -29,7 +30,8 @@ export default defineConfig({
         presetTypography(),
       ]
     }),
-    solidJs()
+    solidJs(),
+    reactJs() // 添加这一行
   ],
   output: 'server',
   adapter: envAdapter(),
