@@ -2,12 +2,20 @@ import { createSignal, For, Show } from 'solid-js'
 import MessageItem from './MessageItem'
 import IconClear from './icons/Clear'
 import type { ChatMessage } from '@/types'
+import { useSpeechRecognition } from "react-speech-kit";
+import RecordIcon from './icons/RecordIcon';
+import StopIcon from './icons/StopIcon';
 
 export default () => {
   let inputRef: HTMLInputElement
   const [messageList, setMessageList] = createSignal<ChatMessage[]>([])
   const [currentAssistantMessage, setCurrentAssistantMessage] = createSignal('')
   const [loading, setLoading] = createSignal(false)
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult: (result: string) => {
+      inputRef.value=result;
+    }
+  });
 
   const handleButtonClick = async () => {
     const inputValue = inputRef.value
@@ -103,6 +111,12 @@ export default () => {
             placeholder:text-slate-400
             placeholder:op-30
           />
+          <button title='listen' onClick={listen} disabled={loading()} h-12 px-4 py-2 bg-slate bg-op-15 hover:bg-op-20 text-slate rounded-sm>
+            <RecordIcon />
+          </button>
+          <button title='stop' onClick={stop} disabled={loading()} h-12 px-4 py-2 bg-slate bg-op-15 hover:bg-op-20 text-slate rounded-sm>
+            <StopIcon />
+          </button>
           <button onClick={handleButtonClick} disabled={loading()} h-12 px-4 py-2 bg-slate bg-op-15 hover:bg-op-20 text-slate rounded-sm>
             Send
           </button>
