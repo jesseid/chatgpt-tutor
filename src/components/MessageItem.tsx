@@ -29,7 +29,7 @@ export default ({ role, message }: Props) => {
     return ''
   }
   return (
-    <div className="flex py-2 gap-3 -mx-4 px-4 rounded-lg transition-colors md:hover:bg-slate/3" class:op-75={ role === 'user' }>
+    <div className="flex py-2 gap-3 -mx-4 px-4 rounded-lg transition-colors md:hover:bg-slate/3" data-op-75={ role === 'user' }>
       <div className={ `shrink-0 w-7 h-7 mt-4 rounded-full op-80 ${ roleClass[role] }` }></div>
       <div className="message prose text-slate break-words overflow-hidden" dangerouslySetInnerHTML={{ __html: htmlString() }}  />
     </div>
