@@ -1,13 +1,30 @@
 {
-  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "esnext"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "ES2019",
+    "strict": true,
     "baseUrl": ".",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    }
-  }
+      "~/*": ["./src/*"]
+    },
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "module": "esnext",
+    "typeRoots": ["./types"],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
